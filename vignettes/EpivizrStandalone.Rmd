@@ -4,7 +4,7 @@ author: "Héctor Corrada Bravo"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteIndexEntry{Introduction to epivizrStandalone}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -21,20 +21,23 @@ to browse any genome of interest using Bioconductor infrastructure.
 For example, to browse the mouse genome we would do the following.
 
 ```{r,eval=FALSE,echo=TRUE}
+library(epivizrStandalone)
 library(Mus.musculus)
+
 app <- startStandalone(Mus.musculus, keep_seqlevels=paste0("chr",c(1:19,"X","Y")))	
 ```
 
 ```{r,eval=TRUE,echo=FALSE}
+library(epivizrStandalone)
 library(Mus.musculus)
 
-mgr <- startStandalone(Mus.musculus, keep_seqlevels=paste0("chr",c(1:19,"X","Y")),
-                       non_interactive=TRUE, debug=TRUE, open_browser=FALSE, try_ports=TRUE)
-mgr$start_server()	
+app <- startStandalone(Mus.musculus, keep_seqlevels=paste0("chr",c(1:19,"X","Y")),
+                       non_interactive=TRUE, try_ports=TRUE)
+app$server$start_server()	
 ```
 
 Now the web app UI serves as a mouse genome browser.
 
 ```{r}
-mgr$stopServer()
+app$stop_app()
 ```

@@ -2,5 +2,5 @@
 .Rhistory
 .RData
 .Ruserdata
-^inst/www
+inst/www
 inst/doc

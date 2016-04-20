@@ -96,18 +96,28 @@ startStandalone <- function(gene_track=NULL, seqinfo=NULL, keep_seqlevels=NULL,
   app <- epivizr::startEpiviz(server=server, 
                               host="http://localhost", 
                               path="/index-standalone.html", 
-                              http_port=server$.port, use_cookie=FALSE,
-                              ...)
+                              http_port=server$.port,
+                              open_browser=FALSE,
+                              use_cookie=FALSE, 
+                              chr=NULL,
+                              start=NULL,
+                              end=NULL, ...)
 
   send_request <- app$server$is_interactive()
+  # add chromosome names and lengths to epiviz app
+  if (!is.null(gene_track)) {
+    seqinfo <- seqinfo(gene_track)
+  }
+  app$data_mgr$add_seqinfo(seqinfo, keep_seqlevels=keep_seqlevels, send_request=send_request)
+  
+  # now load the app
+  if (send_request) {
+    app$.open_browser()
+  }
+  
   app$server$wait_to_clear_requests()
   
   tryCatch({
-    # send chromosome names and lengths to epiviz app
-    if (!is.null(gene_track)) {
-      seqinfo <- seqinfo(gene_track)
-    }
-    app$data_mgr$add_seqinfo(seqinfo, keep_seqlevels=keep_seqlevels, send_request=send_request)
     app$server$wait_to_clear_requests()
     
     # navigate to given starting position
