@@ -28,14 +28,14 @@ initStandalone <- function(url="https://github.com/epiviz/epiviz.git", branch="m
   
   params <- list(url=url, branch=branch, local_path=local_path)
   settings_file <- file.path(normalizePath("~"), epivizrStandalone:::.settings_file)
-  dput(params, file=file.path(settings_file, ".txt"))
+  dput(params, file=settings_file)
   
   if(!is.null(local_path)) {
-    print("linking epivizrStandalone repo to local repo...")
+    cat("linking epivizrStandalone repo to local repo at ", local_path, "...\n")
     file.symlink(from=local_path, to=webpath)
   }
   else {
-    print("cloning epiviz from git ...")
+    cat("cloning epiviz from git ...")
     git2r::clone(url, local_path=webpath)
     if(branch != "master") {
       git2r::checkout(repo, branch)    
