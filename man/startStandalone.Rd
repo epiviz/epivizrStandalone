@@ -4,9 +4,11 @@
 \alias{startStandalone}
 \title{Start a standalone \code{epivizr} session.}
 \usage{
-startStandalone(...)
+startStandalone(non_interactive = FALSE, ...)
 }
 \arguments{
+\item{non_interactive}{(logical) run server in non-interactive mode. Used for testing and development.}
+
 \item{...}{additional arguments passed to \code{\link[epivizr]{startEpiviz}}.}
 }
 \value{
@@ -18,7 +20,7 @@ through the \code{\link[epivizr]{startEpiviz}} function.
 }
 \examples{
 # see package vignete for example usage
-app <- startStandalone(non_interactive=TRUE, open_browser=TRUE)
+app <- startStandalone(non_interactive=TRUE)
 app$stop_app()
 
 }

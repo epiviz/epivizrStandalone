@@ -1,4 +1,4 @@
 library(testthat)
-library(epivizrServer)
+library(epivizrStandalone)
 
-test_check("epivizrServer")
+test_check("epivizrStandalone")

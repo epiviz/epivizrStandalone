@@ -5,7 +5,7 @@
 \title{Set settings for epiviz standalone repository.}
 \usage{
 setStandalone(url = "https://github.com/epiviz/epiviz.git",
-  branch = "master", local_path = NULL)
+  branch = "master", local_path = NULL, non_interactive = FALSE)
 }
 \arguments{
 \item{url}{(character) github url to use. defaults to (\url{"https://github.com/epiviz/epiviz.git"}).}
@@ -13,6 +13,8 @@ setStandalone(url = "https://github.com/epiviz/epiviz.git",
 \item{branch}{(character) branch on the github repository. defaults to (master).}
 
 \item{local_path}{(character) if you already have a local instance of epiviz and would like to run standalone use this.}
+
+\item{non_interactive}{(logical) don't download repo, used for testing purposes.}
 }
 \value{
 path to the epiviz app git repository
@@ -24,10 +26,9 @@ which git repository is used. It can be either a github repository (the usual ca
 or local repository containing the epiviz JS app (used for testing and development).
 }
 \examples{
-# see package vignete for example usage
-\dontrun {
-setStandalone(url="https://github.com/epiviz/epiviz.git", branch="master")
-}
+# argument non_interactive here to avoid downloading when testing
+# package. Remove non_interactive argument when you try it out.
+setStandalone(url="https://github.com/epiviz/epiviz.git", branch="master", non_interactive=TRUE)
 
 }
 

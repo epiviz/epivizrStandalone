@@ -1,7 +1,7 @@
 context("start epiviz standalone")
 
-test_that("startEpiviz creates a proper object", {
-  app <- startEpiviz(non_interactive=TRUE)
+test_that("startStandalone creates a proper object", {
+  app <- startStandalone(non_interactive=TRUE)
   expect_is(app, "EpivizApp")
   
   expect_is(app$server, "EpivizServer")

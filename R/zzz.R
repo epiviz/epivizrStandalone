@@ -8,5 +8,5 @@
     dir.create(file.path(system.file(package=pkgname), "www"))
     system.file("www", package=pkgname)
   })
-  dput(.default_settings, file=epivizrStandalone:::.settings_file)
+  dput(.default_settings, file=.settings_file)
 }

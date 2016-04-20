@@ -21,8 +21,8 @@
 .check_epiviz_update <- function() {
   webpath <- system.file("www", package = "epivizrStandalone")
   
-  if (file.exists(epivizrStandalone:::.settings_file)) {
-    params <- dget(file=epivizrStandalone:::.settings_file) 
+  if (file.exists(.settings_file)) {
+    params <- dget(file=.settings_file) 
     
     if (is.null(params$local_path)) {
       if (!is.null(params$url) & !is.null(params$branch)){
@@ -47,21 +47,26 @@
 #' Uses the local repository of epiviz JS app to start a standalone epivizr session
 #' through the \code{\link[epivizr]{startEpiviz}} function.
 #' 
+#' @param non_interactive (logical) run server in non-interactive mode. Used for testing and development.
 #' @param ... additional arguments passed to \code{\link[epivizr]{startEpiviz}}.
 #'  
 #' @return An object of class \code{\link[epivizr]{EpivizApp}}
 #' 
 #' @examples
 #' # see package vignete for example usage
-#' app <- startStandalone(non_interactive=TRUE, open_browser=TRUE)
+#' app <- startStandalone(non_interactive=TRUE)
 #' app$stop_app()
 #' 
+#' @import epivizr
+#' @import epivizrServer
 #' @export
-startStandalone <- function(...) {
-  .check_epiviz_update()
+startStandalone <- function(non_interactive=FALSE, ...) {
+  if (!non_interactive) {
+    .check_epiviz_update() 
+  }
   webpath <- system.file("www", package = "epivizrStandalone")
   
-  server <- epivizrServer::createServer(static_site_path = webpath, ...)
+  server <- epivizrServer::createServer(static_site_path = webpath, non_interactive=non_interactive, ...)
   app <- epivizr::startEpiviz(server=server, 
                               host="http://localhost", 
                               path="/index-standalone.html", 

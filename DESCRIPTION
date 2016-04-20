@@ -5,10 +5,16 @@ Maintainer: Hector Corrada Bravo <hcorrada@gmail.com>
 Author: Hector Corrada Bravo, Jayaram Kancherla 
 Description: This package imports the epiviz visualization JavaScript app for genomic data interactive visualization. The 'epivizrServer' package is used to provide a web server running completely within R. This standalone version allows to browse arbitrary genomes through genome annotations provided by Bioconductor packages. 
 Depends:
-    R (>= 3.1.1),
+    R (>= 3.2.3),
     epivizr (>= 1.99.0)
-License: MIT
+License: MIT + file LICENSE
 LazyData: true
 Imports:
-    git2r
+    git2r,
+    epivizrServer
+Suggests: testthat,
+    knitr,
+    rmarkdown
 RoxygenNote: 5.0.1
+VignetteBuilder: knitr
+biocViews: Visualization, Infrastructure, GUI

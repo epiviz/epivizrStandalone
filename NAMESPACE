@@ -2,4 +2,6 @@
 
 export(setStandalone)
 export(startStandalone)
+import(epivizr)
+import(epivizrServer)
 import(git2r)
