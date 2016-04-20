@@ -1,21 +1,38 @@
+.check_is_epiviz_repo <- function(path) {
+  if (!dir.exists(path)) {
+    return(FALSE)
+  }  
+  
+  if (!git2r::in_repository(path)) {
+    return(FALSE)
+  }
+  
+  if (!file.exists(file.path(path, "index-standalone.html"))) {
+    return(FALSE)
+  }
+  
+  if (!file.exists(file.path(path, "src", "epiviz", "epiviz.js"))) {
+    return(FALSE)
+  }
+  
+  TRUE
+}
+
 .check_epiviz_update <- function() {
   webpath <- system.file("www", package = "epivizrStandalone")
   
-  settings_file <- file.path(normalizePath("~"), epivizrStandalone:::.settings_file)  
-  if (file.exists(settings_file)) {
-    params <- dget(file=settings_file) 
+  if (file.exists(epivizrStandalone:::.settings_file)) {
+    params <- dget(file=epivizrStandalone:::.settings_file) 
     
     if (is.null(params$local_path)) {
       if (!is.null(params$url) & !is.null(params$branch)){
-        if (dir.exists(webpath) && !file.exists(file.path(webpath, ".needs-init"))) {
+        if (.check_is_epiviz_repo(webpath)) {
           cat("checking for updates to epiviz app...\n")
           repo <- git2r::repository(webpath)
           git2r::pull(repo)
           packageStartupMessage("done")
         } else {
-          if (file.exists(file.path(webpath, ".needs-init"))) {
-            file.remove(file.path(webpath, ".needs-init"))
-          }
+          unlink(webpath, recursive=TRUE)
           cat("cloning epiviz JS app from repository...\n")
           git2r::clone("https://github.com/epiviz/epiviz.git", local_path=webpath)
           cat("done\n")
@@ -44,7 +61,7 @@ startStandalone <- function(...) {
   .check_epiviz_update()
   webpath <- system.file("www", package = "epivizrStandalone")
   
-  server <- epivizrServer::createServer(static_site_path = webpath)
+  server <- epivizrServer::createServer(static_site_path = webpath, ...)
   app <- epivizr::startEpiviz(server=server, 
                               host="http://localhost", 
                               path="/index-standalone.html", 

@@ -1,9 +1,12 @@
-.settings_file <- ".epivizr-standalone"
+.settings_file <- file.path(normalizePath("~"), ".epivizr-standalone")
 .default_settings <- list(url="http://github.com/epiviz/epivizr.git", 
                           branch="master", 
                           local_path=NULL)
 
 .onLoad <- function(libname = find.package("epivizrStandalone"), pkgname = "epivizrStandalone") {
-  settings_file <- file.path(normalizePath("~"), epivizrStandalone:::.settings_file)
-  dput(.default_settings, file=settings_file)
+  webpath <- tryCatch(system.file("www", package=pkgname, mustWork=TRUE), error=function(e) {
+    dir.create(file.path(system.file(package=pkgname), "www"))
+    system.file("www", package=pkgname)
+  })
+  dput(.default_settings, file=epivizrStandalone:::.settings_file)
 }
