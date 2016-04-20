@@ -11,10 +11,14 @@ License: MIT + file LICENSE
 LazyData: true
 Imports:
     git2r,
-    epivizrServer
+    epivizrServer,
+    GenomeInfoDb
 Suggests: testthat,
     knitr,
-    rmarkdown
+    rmarkdown,
+    OrganismDbi,
+    GenomicFeatures,
+    Mus.musculus
 RoxygenNote: 5.0.1
 VignetteBuilder: knitr
 biocViews: Visualization, Infrastructure, GUI

@@ -2,6 +2,7 @@
 
 export(setStandalone)
 export(startStandalone)
+import(GenomeInfoDb)
 import(epivizr)
 import(epivizrServer)
 import(git2r)

@@ -4,9 +4,22 @@
 \alias{startStandalone}
 \title{Start a standalone \code{epivizr} session.}
 \usage{
-startStandalone(non_interactive = FALSE, ...)
+startStandalone(gene_track = NULL, seqinfo = NULL, keep_seqlevels = NULL,
+  chr = NULL, start = NULL, end = NULL, non_interactive = FALSE, ...)
 }
 \arguments{
+\item{gene_track}{(OrganismDb) an object of type \code{\link[OrganismDbi]{OrganismDb}} or \code{\link[GenomicFeatures]{TxDb}}}
+
+\item{seqinfo}{(Seqinfo) an object of type \code{\link[GenomeInfoDb]{Seqinfo}} from which sequence names and lengths are obtained}
+
+\item{keep_seqlevels}{(character) vector of sequence names to include in the standalone app}
+
+\item{chr}{(character) chromosome to browse to on app startup.}
+
+\item{start}{(integer) start location to browse to on app startup.}
+
+\item{end}{(integer) end location to browse to on app startup.}
+
 \item{non_interactive}{(logical) run server in non-interactive mode. Used for testing and development.}
 
 \item{...}{additional arguments passed to \code{\link[epivizr]{startEpiviz}}.}
@@ -16,11 +29,16 @@ An object of class \code{\link[epivizr]{EpivizApp}}
 }
 \description{
 Uses the local repository of epiviz JS app to start a standalone epivizr session
-through the \code{\link[epivizr]{startEpiviz}} function.
+through the \code{\link[epivizr]{startEpiviz}} function. The epiviz app requires a list
+of sequence names and lengths (e.g., chromsome names and lengths) to setup genome browsing. 
+These can be passed in the \code{seqinfo} argument or derived from the \code{gene_track} argument.
+The \code{gene_track} argument can be used to pass a genome annotation and add a gene track to the 
+epiviz browser. See package vignette for further detail.
 }
 \examples{
 # see package vignete for example usage
-app <- startStandalone(non_interactive=TRUE)
+seqinfo <- GenomeInfoDb::Seqinfo(c("chr1","chr2"), c(10,20))
+app <- startStandalone(seqinfo=seqinfo, non_interactive=TRUE)
 app$stop_app()
 
 }
