@@ -8,7 +8,7 @@
     if (is.null(params$local_path)) {
       if (!is.null(params$url) & !is.null(params$branch)){
         if (dir.exists(webpath) && !file.exists(file.path(webpath, ".needs-init"))) {
-          packageStartupMessage("checking for updates to epiviz app...")
+          cat("checking for updates to epiviz app...\n")
           repo <- git2r::repository(webpath)
           git2r::pull(repo)
           packageStartupMessage("done")
@@ -16,9 +16,9 @@
           if (file.exists(file.path(webpath, ".needs-init"))) {
             file.remove(file.path(webpath, ".needs-init"))
           }
-          packageStartupMessage("cloning epiviz JS app from repository...")
+          cat("cloning epiviz JS app from repository...\n")
           git2r::clone("https://github.com/epiviz/epiviz.git", local_path=webpath)
-          packageStartupMessage("done")
+          cat("done\n")
         }  
       }
     }  
