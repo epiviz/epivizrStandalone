@@ -14,11 +14,12 @@ Imports:
     git2r,
     epivizrServer,
     GenomeInfoDb,
+    BiocGenerics,
+    GenomicFeatures
 Suggests: testthat,
     knitr,
     rmarkdown,
     OrganismDbi,
-    GenomicFeatures,
     Mus.musculus,
     Biobase
 RoxygenNote: 5.0.1
