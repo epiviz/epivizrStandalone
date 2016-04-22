@@ -32,7 +32,6 @@ test_that("startStandalone works with seqinfo", {
 })
 
 test_that("startStandalone works with OrganismDb object", {
-  skip("for now, having issues with .findInheritedMethods")
   skip_on_cran()
   skip_if_not_installed("Mus.musculus")
   require(Mus.musculus)
@@ -50,7 +49,6 @@ test_that("startStandalone works with OrganismDb object", {
 })
 
 test_that("startStandalone works with TxDb object", {
-  skip("for now, having issues with .findInheritedMethods")
   skip_on_cran()
   skip_if_not_installed("TxDb.Mmusculus.UCSC.mm10.knownGene")
   require(TxDb.Mmusculus.UCSC.mm10.knownGene)

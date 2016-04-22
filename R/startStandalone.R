@@ -83,6 +83,9 @@
 #' @import epivizr
 #' @import epivizrServer
 #' @import GenomeInfoDb
+#' @import methods
+#' @import BiocGenerics
+#' @import GenomicFeatures
 #' @export
 startStandalone <- function(gene_track=NULL, seqinfo=NULL, keep_seqlevels=NULL,  
                             chr=NULL, start=NULL, end=NULL,
