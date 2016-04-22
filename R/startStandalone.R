@@ -127,7 +127,10 @@ startStandalone <- function(gene_track=NULL, seqinfo=NULL, keep_seqlevels=NULL,
   }
 
   tryCatch({
-    .wait_until_connected(app$server)
+    if (app$server$is_interactive()) {
+      .wait_until_connected(app$server)      
+    }
+
     app$data_mgr$add_seqinfo(seqinfo, keep_seqlevels=keep_seqlevels, send_request=send_request)
     app$server$wait_to_clear_requests()
     

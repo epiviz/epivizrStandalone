@@ -1,6 +1,6 @@
 .settings_file <- file.path(normalizePath("~"), ".epivizr-standalone")
 .default_settings <- list(url="http://github.com/epiviz/epivizr.git", 
-                          branch="master", 
+                          branch="epiviz-4.1", 
                           local_path=NULL)
 
 .onLoad <- function(libname = find.package("epivizrStandalone"), pkgname = "epivizrStandalone") {
