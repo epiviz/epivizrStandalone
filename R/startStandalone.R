@@ -42,6 +42,18 @@
   }
 }
 
+.wait_until_connected <- function(server, timeout=3L) {
+  ptm <- proc.time()
+  while (!server$is_socket_connected() && (proc.time() - ptm < timeout)["elapsed"]) {
+    Sys.sleep(0.001)
+    server$service()
+  }
+  if (!server$is_socket_connected()) {
+    stop("[epivizrStandalone] Error starting app. UI unable to connect to websocket server.")
+  }
+  invisible()
+}
+
 #' Start a standalone \code{epivizr} session.
 #' 
 #' Uses the local repository of epiviz JS app to start a standalone epivizr session
@@ -108,16 +120,15 @@ startStandalone <- function(gene_track=NULL, seqinfo=NULL, keep_seqlevels=NULL,
   if (!is.null(gene_track)) {
     seqinfo <- seqinfo(gene_track)
   }
-  app$data_mgr$add_seqinfo(seqinfo, keep_seqlevels=keep_seqlevels, send_request=send_request)
   
   # now load the app
   if (send_request) {
     app$.open_browser()
   }
-  
-  app$server$wait_to_clear_requests()
-  
+
   tryCatch({
+    .wait_until_connected(app$server)
+    app$data_mgr$add_seqinfo(seqinfo, keep_seqlevels=keep_seqlevels, send_request=send_request)
     app$server$wait_to_clear_requests()
     
     # navigate to given starting position
