@@ -1,46 +1,3 @@
-.check_is_epiviz_repo <- function(path) {
-  if (!dir.exists(path)) {
-    return(FALSE)
-  }  
-  
-  if (!git2r::in_repository(path)) {
-    return(FALSE)
-  }
-  
-  if (!file.exists(file.path(path, "index-standalone.html"))) {
-    return(FALSE)
-  }
-  
-  if (!file.exists(file.path(path, "src", "epiviz", "epiviz.js"))) {
-    return(FALSE)
-  }
-  
-  TRUE
-}
-
-.check_epiviz_update <- function() {
-  webpath <- system.file("www", package = "epivizrStandalone")
-  
-  if (file.exists(.settings_file)) {
-    params <- dget(file=.settings_file) 
-    
-    if (is.null(params$local_path)) {
-      if (!is.null(params$url) & !is.null(params$branch)){
-        if (.check_is_epiviz_repo(webpath)) {
-          cat("checking for updates to epiviz app...\n")
-          repo <- git2r::repository(webpath)
-          git2r::pull(repo)
-          packageStartupMessage("done")
-        } else {
-          unlink(webpath, recursive=TRUE)
-          cat("cloning epiviz JS app from repository...\n")
-          git2r::clone("https://github.com/epiviz/epiviz.git", local_path=webpath)
-          cat("done\n")
-        }  
-      }
-    }  
-  }
-}
 
 .wait_until_connected <- function(server, timeout=3L) {
   ptm <- proc.time()
@@ -107,10 +64,11 @@ startStandalone <- function(gene_track=NULL, seqinfo=NULL, keep_seqlevels=NULL,
   }
   webpath <- system.file("www", package = "epivizrStandalone")
   
+  index_file <- .get_standalone_index()
   server <- epivizrServer::createServer(static_site_path = webpath, non_interactive=non_interactive, ...)
   app <- epivizr::startEpiviz(server=server, 
                               host="http://localhost", 
-                              path="/index-standalone.html", 
+                              path=paste0("/", index_file), 
                               http_port=server$.port,
                               open_browser=FALSE,
                               use_cookie=FALSE, 
