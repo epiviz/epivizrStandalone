@@ -43,6 +43,8 @@
 #' @import methods
 #' @import BiocGenerics
 #' @import GenomicFeatures
+#' @import S4Vectors
+#' 
 #' @export
 startStandalone <- function(gene_track=NULL, seqinfo=NULL, keep_seqlevels=NULL,  
                             chr=NULL, start=NULL, end=NULL,
