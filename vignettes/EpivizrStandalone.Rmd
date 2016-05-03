@@ -31,9 +31,9 @@ app <- startStandalone(Mus.musculus, keep_seqlevels=paste0("chr",c(1:19,"X","Y")
 library(epivizrStandalone)
 library(Mus.musculus)
 
-seqinfo <- seqinfo(Mus.musculus)
-app <- startStandalone(seqinfo=seqinfo, keep_seqlevels=paste0("chr",c(1:19,"X","Y")),
+app <- startStandalone(seqinfo=seqinfo(Mus.musculus), keep_seqlevels=paste0("chr",c(1:19,"X","Y")),
                        non_interactive=TRUE, try_ports=TRUE)
+
 app$server$start_server()	
 ```
 
