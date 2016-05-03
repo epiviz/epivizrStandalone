@@ -1,45 +1,13 @@
-.check_is_epiviz_repo <- function(path) {
-  if (!dir.exists(path)) {
-    return(FALSE)
-  }  
-  
-  if (!git2r::in_repository(path)) {
-    return(FALSE)
+.wait_until_connected <- function(server, timeout=3L) {
+  ptm <- proc.time()
+  while (!server$is_socket_connected() && (proc.time() - ptm < timeout)["elapsed"]) {
+    Sys.sleep(0.001)
+    server$service()
   }
-  
-  if (!file.exists(file.path(path, "index-standalone.html"))) {
-    return(FALSE)
+  if (!server$is_socket_connected()) {
+    stop("[epivizrStandalone] Error starting app. UI unable to connect to websocket server.")
   }
-  
-  if (!file.exists(file.path(path, "src", "epiviz", "epiviz.js"))) {
-    return(FALSE)
-  }
-  
-  TRUE
-}
-
-.check_epiviz_update <- function() {
-  webpath <- system.file("www", package = "epivizrStandalone")
-  
-  if (file.exists(.settings_file)) {
-    params <- dget(file=.settings_file) 
-    
-    if (is.null(params$local_path)) {
-      if (!is.null(params$url) & !is.null(params$branch)){
-        if (.check_is_epiviz_repo(webpath)) {
-          cat("checking for updates to epiviz app...\n")
-          repo <- git2r::repository(webpath)
-          git2r::pull(repo)
-          packageStartupMessage("done")
-        } else {
-          unlink(webpath, recursive=TRUE)
-          cat("cloning epiviz JS app from repository...\n")
-          git2r::clone("https://github.com/epiviz/epiviz.git", local_path=webpath)
-          cat("done\n")
-        }  
-      }
-    }  
-  }
+  invisible()
 }
 
 #' Start a standalone \code{epivizr} session.
@@ -71,6 +39,11 @@
 #' @import epivizr
 #' @import epivizrServer
 #' @import GenomeInfoDb
+#' @import methods
+#' @import BiocGenerics
+#' @import GenomicFeatures
+#' @import S4Vectors
+#' 
 #' @export
 startStandalone <- function(gene_track=NULL, seqinfo=NULL, keep_seqlevels=NULL,  
                             chr=NULL, start=NULL, end=NULL,
@@ -92,10 +65,11 @@ startStandalone <- function(gene_track=NULL, seqinfo=NULL, keep_seqlevels=NULL,
   }
   webpath <- system.file("www", package = "epivizrStandalone")
   
+  index_file <- .get_standalone_index()
   server <- epivizrServer::createServer(static_site_path = webpath, non_interactive=non_interactive, ...)
   app <- epivizr::startEpiviz(server=server, 
                               host="http://localhost", 
-                              path="/index-standalone.html", 
+                              path=paste0("/", index_file), 
                               http_port=server$.port,
                               open_browser=FALSE,
                               use_cookie=FALSE, 
@@ -108,16 +82,18 @@ startStandalone <- function(gene_track=NULL, seqinfo=NULL, keep_seqlevels=NULL,
   if (!is.null(gene_track)) {
     seqinfo <- seqinfo(gene_track)
   }
-  app$data_mgr$add_seqinfo(seqinfo, keep_seqlevels=keep_seqlevels, send_request=send_request)
   
   # now load the app
   if (send_request) {
     app$.open_browser()
   }
-  
-  app$server$wait_to_clear_requests()
-  
+
   tryCatch({
+    if (app$server$is_interactive()) {
+      .wait_until_connected(app$server)      
+    }
+
+    app$data_mgr$add_seqinfo(seqinfo, keep_seqlevels=keep_seqlevels, send_request=send_request)
     app$server$wait_to_clear_requests()
     
     # navigate to given starting position
