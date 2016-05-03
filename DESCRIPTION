@@ -1,0 +1,22 @@
+Package: epivizrStandalone
+Title: Run Epiviz Interactive Genomic Data Visualization App within R
+Version: 1.0.0
+Maintainer: Hector Corrada Bravo <hcorrada@gmail.com>
+Author: Hector Corrada Bravo, Jayaram Kancherla 
+Description: This package imports the epiviz visualization JavaScript 
+        app for genomic data interactive visualization. The 'epivizrServer' 
+        package is used to provide a web server running 
+        completely within R. This standalone version allows to browse 
+        arbitrary genomes through genome annotations provided by 
+        Bioconductor packages. 
+Depends: R (>= 3.2.3), epivizr (>= 1.99.5), methods
+License: MIT + file LICENSE
+LazyData: true
+Imports: git2r, epivizrServer, GenomeInfoDb, BiocGenerics, 
+        GenomicFeatures, S4Vectors
+Suggests: testthat, knitr, rmarkdown, OrganismDbi (>= 1.13.9), Mus.musculus,
+        Biobase
+RoxygenNote: 5.0.1
+VignetteBuilder: knitr
+biocViews: Visualization, Infrastructure, GUI
+NeedsCompilation: no
