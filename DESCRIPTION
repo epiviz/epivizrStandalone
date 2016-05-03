@@ -1,6 +1,6 @@
 Package: epivizrStandalone
 Title: Run Epiviz Interactive Genomic Data Visualization App within R
-Version: 0.99.1
+Version: 0.99.2
 Maintainer: Hector Corrada Bravo <hcorrada@gmail.com>
 Author: Hector Corrada Bravo, Jayaram Kancherla 
 Description: This package imports the epiviz visualization JavaScript 
