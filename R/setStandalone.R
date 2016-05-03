@@ -27,7 +27,8 @@ setStandalone <- function(url="https://github.com/epiviz/epiviz.git", branch="ma
   
   unlink(webpath, recursive = TRUE)
   
-  params <- list(url=url, branch=branch, local_path=local_path)
+  index_file <- ifelse(branch=="min", "epivizr-standalone.html", "index-standalone.html")
+  params <- list(url=url, branch=branch, local_path=local_path, index_file=index_file)
   dput(params, file=.settings_file)
   
   if (!is.null(local_path)) {
@@ -41,4 +42,59 @@ setStandalone <- function(url="https://github.com/epiviz/epiviz.git", branch="ma
     }
   }
   webpath
+}
+
+.check_epiviz_repo <- function(params) {
+  path <- system.file("www", package="epivizrStandalone")
+  
+  if (!dir.exists(path)) {
+    return(FALSE)
+  }  
+  
+  if (!git2r::in_repository(path)) {
+    return(FALSE)
+  }
+  
+  if (!file.exists(file.path(path, params$index_file))) {
+    return(FALSE)
+  }
+  
+  js_file <- ifelse(params$branch=="min", file.path(path, "epiviz-min.js"), file.path(path, "src", "epiviz", "epiviz.js"))
+  if (!file.exists(js_file)) {
+    return(FALSE)
+  }
+  
+  TRUE
+}
+
+.check_epiviz_update <- function() {
+  webpath <- system.file("www", package = "epivizrStandalone")
+  
+  if (file.exists(.settings_file)) {
+    params <- dget(file=.settings_file) 
+    
+    if (is.null(params$local_path)) {
+      if (!is.null(params$url) & !is.null(params$branch)){
+        if (.check_epiviz_repo(params)) {
+          cat("checking for updates to epiviz app...\n")
+          repo <- git2r::repository(webpath)
+          git2r::pull(repo)
+          cat("done\n")
+        } else {
+          unlink(webpath, recursive=TRUE)
+          cat("cloning epiviz JS app from repository...\n")
+          repo <- git2r::clone("https://github.com/epiviz/epiviz.git", local_path=webpath)
+          if (params$branch != "master") {
+            git2r::checkout(repo, params$branch)    
+          }
+          cat("done\n")
+        }  
+      }
+    }  
+  }
+}
+
+.get_standalone_index <- function() {
+  params <- dget(file=.settings_file)
+  params$index_file
 }
