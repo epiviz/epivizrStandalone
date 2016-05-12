@@ -19,7 +19,7 @@
 #' setStandalone(url="https://github.com/epiviz/epiviz.git", branch="master", non_interactive=TRUE)
 #' 
 #' @export
-setStandalone <- function(url="https://github.com/epiviz/epiviz.git", branch="master", local_path=NULL, non_interactive=FALSE) {
+setStandalone <- function(url="https://github.com/epiviz/epiviz.git", branch="min", local_path=NULL, non_interactive=FALSE) {
   webpath <- system.file("www", package = "epivizrStandalone")
   if (non_interactive) {
     return(webpath)
@@ -29,7 +29,7 @@ setStandalone <- function(url="https://github.com/epiviz/epiviz.git", branch="ma
   
   index_file <- ifelse(branch=="min", "epivizr-standalone.html", "index-standalone.html")
   params <- list(url=url, branch=branch, local_path=local_path, index_file=index_file)
-  dput(params, file=.settings_file)
+  options(epivizrStandalone_settings=params)
   
   if (!is.null(local_path)) {
     cat("linking epivizrStandalone repo to local repo at ", local_path, "...\n")
@@ -70,31 +70,29 @@ setStandalone <- function(url="https://github.com/epiviz/epiviz.git", branch="ma
 .check_epiviz_update <- function() {
   webpath <- system.file("www", package = "epivizrStandalone")
   
-  if (file.exists(.settings_file)) {
-    params <- dget(file=.settings_file) 
-    
-    if (is.null(params$local_path)) {
-      if (!is.null(params$url) & !is.null(params$branch)){
-        if (.check_epiviz_repo(params)) {
-          cat("checking for updates to epiviz app...\n")
-          repo <- git2r::repository(webpath)
-          git2r::pull(repo)
-          cat("done\n")
-        } else {
-          unlink(webpath, recursive=TRUE)
-          cat("cloning epiviz JS app from repository...\n")
-          repo <- git2r::clone("https://github.com/epiviz/epiviz.git", local_path=webpath)
-          if (params$branch != "master") {
-            git2r::checkout(repo, params$branch)    
-          }
-          cat("done\n")
-        }  
-      }
-    }  
-  }
+  params <- getOption("epivizrStandalone_settings")
+  
+  if (is.null(params$local_path)) {
+    if (!is.null(params$url) & !is.null(params$branch)){
+      if (.check_epiviz_repo(params)) {
+        cat("checking for updates to epiviz app...\n")
+        repo <- git2r::repository(webpath)
+        git2r::pull(repo)
+        cat("done\n")
+      } else {
+        unlink(webpath, recursive=TRUE)
+        cat("cloning epiviz JS app from repository...\n")
+        repo <- git2r::clone("https://github.com/epiviz/epiviz.git", local_path=webpath)
+        if (params$branch != "master") {
+          git2r::checkout(repo, params$branch)    
+        }
+        cat("done\n")
+      }  
+    }
+  }  
 }
 
 .get_standalone_index <- function() {
-  params <- dget(file=.settings_file)
+  params <- getOption("epivizrStandalone_settings")
   params$index_file
 }
