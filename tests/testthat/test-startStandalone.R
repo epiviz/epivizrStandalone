@@ -1,7 +1,6 @@
 context("start epiviz standalone")
 
 test_that("startStandalone creates a proper object", {
-  skip("finalize problems")
   seqinfo <- GenomeInfoDb::Seqinfo(c("chr1", "chr2"), c(10,20))
   app <- startStandalone(seqinfo=seqinfo, non_interactive=TRUE)
   expect_is(app, "EpivizApp")
@@ -14,7 +13,6 @@ test_that("startStandalone creates a proper object", {
 })
 
 test_that("startStandalone works with seqinfo", {
-  skip("finalize problems")
   skip_on_cran()
   skip_if_not_installed("Mus.musculus")
   
@@ -34,14 +32,18 @@ test_that("startStandalone works with seqinfo", {
 })
 
 test_that("startStandalone works with OrganismDb object", {
-  skip("finalize problems")
   skip_on_cran()
   skip_if_not_installed("Mus.musculus")
   require(Mus.musculus)
   
   seqlevels <- paste0("chr", c(1:19,"X","Y", "M"))
   
-  app <- startStandalone(gene_track=Mus.musculus, keep_seqlevels=seqlevels, non_interactive=TRUE)
+  register_function <- function(app) {
+    epivizr:::.register_all_the_epiviz_things(app)
+    app$chart_mgr$register_chart_type("GenesTrack")
+  }
+  
+  app <- startStandalone(gene_track=Mus.musculus, keep_seqlevels=seqlevels, non_interactive=TRUE, register_function=register_function)
   expect_is(app, "EpivizApp")
   
   expect_is(app$server, "EpivizServer")
@@ -52,14 +54,19 @@ test_that("startStandalone works with OrganismDb object", {
 })
 
 test_that("startStandalone works with TxDb object", {
-  skip("finalize problems")
   skip_on_cran()
   skip_if_not_installed("TxDb.Mmusculus.UCSC.mm10.knownGene")
   require(TxDb.Mmusculus.UCSC.mm10.knownGene)
 
   seqlevels <- paste0("chr", c(1:19,"X","Y", "M"))
+
+  register_function <- function(app) {
+    epivizr:::.register_all_the_epiviz_things(app)
+    app$chart_mgr$register_chart_type("GenesTrack")
+  }
   
-  app <- startStandalone(gene_track=TxDb.Mmusculus.UCSC.mm10.knownGene, keep_seqlevels=seqlevels, non_interactive=TRUE)
+  app <- startStandalone(gene_track=TxDb.Mmusculus.UCSC.mm10.knownGene, keep_seqlevels=seqlevels, non_interactive=TRUE,
+                         register_function=register_function)
   expect_is(app, "EpivizApp")
   
   expect_is(app$server, "EpivizServer")

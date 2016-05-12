@@ -26,6 +26,7 @@
 #' @param start (integer) start location to browse to on app startup.
 #' @param end (integer) end location to browse to on app startup.
 #' @param non_interactive (logical) run server in non-interactive mode. Used for testing and development.
+#' @param register_function (function) function used to initialize actions in epiviz app. Used for testing and development.
 #' @param ... additional arguments passed to \code{\link[epivizr]{startEpiviz}}.
 #'  
 #' @return An object of class \code{\link[epivizr]{EpivizApp}}
@@ -47,7 +48,9 @@
 #' @export
 startStandalone <- function(gene_track=NULL, seqinfo=NULL, keep_seqlevels=NULL,  
                             chr=NULL, start=NULL, end=NULL,
-                            non_interactive=FALSE, ...) {
+                            non_interactive=FALSE, 
+                            register_function=epivizr:::.register_all_the_epiviz_things, 
+                            ...) {
   if (is.null(gene_track) && is.null(seqinfo)) {
     stop("Error starting standalone, one of 'gene_track' and 'seqinfo' must be non-null")
   }
@@ -75,7 +78,9 @@ startStandalone <- function(gene_track=NULL, seqinfo=NULL, keep_seqlevels=NULL,
                               use_cookie=FALSE, 
                               chr=NULL,
                               start=NULL,
-                              end=NULL, ...)
+                              end=NULL, 
+                              register_function=register_function,
+                              ...)
 
   send_request <- app$server$is_interactive()
   # add chromosome names and lengths to epiviz app

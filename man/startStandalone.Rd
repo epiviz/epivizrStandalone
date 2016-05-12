@@ -5,7 +5,8 @@
 \title{Start a standalone \code{epivizr} session.}
 \usage{
 startStandalone(gene_track = NULL, seqinfo = NULL, keep_seqlevels = NULL,
-  chr = NULL, start = NULL, end = NULL, non_interactive = FALSE, ...)
+  chr = NULL, start = NULL, end = NULL, non_interactive = FALSE,
+  register_function = epivizr:::.register_all_the_epiviz_things, ...)
 }
 \arguments{
 \item{gene_track}{(OrganismDb) an object of type \code{\link[OrganismDbi]{OrganismDb}} or \code{\link[GenomicFeatures]{TxDb}}}
@@ -21,6 +22,8 @@ startStandalone(gene_track = NULL, seqinfo = NULL, keep_seqlevels = NULL,
 \item{end}{(integer) end location to browse to on app startup.}
 
 \item{non_interactive}{(logical) run server in non-interactive mode. Used for testing and development.}
+
+\item{register_function}{(function) function used to initialize actions in epiviz app. Used for testing and development.}
 
 \item{...}{additional arguments passed to \code{\link[epivizr]{startEpiviz}}.}
 }
