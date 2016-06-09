@@ -69,7 +69,6 @@ setStandalone <- function(url="https://github.com/epiviz/epiviz.git", branch="mi
 
 .check_epiviz_update <- function() {
   webpath <- system.file("www", package = "epivizrStandalone")
-  
   params <- getOption("epivizrStandalone_settings")
   
   if (is.null(params$local_path)) {
