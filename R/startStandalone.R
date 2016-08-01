@@ -101,6 +101,7 @@ startStandalone <- function(gene_track=NULL, seqinfo=NULL, keep_seqlevels=NULL,
                               end=NULL, 
                               register_function=register_function,
                               browser_fun=browser_fun,
+                              ws_host=host,
                               ...)
 
   send_request <- app$server$is_interactive()
