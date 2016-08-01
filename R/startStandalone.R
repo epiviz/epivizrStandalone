@@ -10,6 +10,15 @@
   invisible()
 }
 
+.viewer_option_browse_fun <- function(url) {
+  viewer <- getOption("viewer")
+  if (is.null(viewer)) {
+    utils::browseURL(url)
+  } else {
+    viewer(url)
+  }
+}
+
 #' Start a standalone \code{epivizr} session.
 #' 
 #' Uses the local repository of epiviz JS app to start a standalone epivizr session
@@ -27,6 +36,8 @@
 #' @param end (integer) end location to browse to on app startup.
 #' @param non_interactive (logical) run server in non-interactive mode. Used for testing and development.
 #' @param register_function (function) function used to initialize actions in epiviz app. Used for testing and development.
+#' @param use_viewer_option (logical) run application in viewer defined by \code{getOption("viewer")}.
+#'  This allows standalone app to run in Rstudio's viewer (FALSE by default)
 #' @param ... additional arguments passed to \code{\link[epivizr]{startEpiviz}}.
 #'  
 #' @return An object of class \code{\link[epivizr]{EpivizApp}}
@@ -49,7 +60,8 @@
 startStandalone <- function(gene_track=NULL, seqinfo=NULL, keep_seqlevels=NULL,  
                             chr=NULL, start=NULL, end=NULL,
                             non_interactive=FALSE, 
-                            register_function=epivizr:::.register_all_the_epiviz_things, 
+                            register_function=epivizr:::.register_all_the_epiviz_things,
+                            use_viewer_option=FALSE,
                             ...) {
   if (is.null(gene_track) && is.null(seqinfo)) {
     stop("Error starting standalone, one of 'gene_track' and 'seqinfo' must be non-null")
@@ -69,7 +81,12 @@ startStandalone <- function(gene_track=NULL, seqinfo=NULL, keep_seqlevels=NULL,
 
   }
   webpath <- system.file("www", package = "epivizrStandalone")
-  
+  browser_fun <- if (use_viewer_option) {
+    .viewer_option_browse_fun
+  } else {
+    utils::browseURL
+  }
+    
   index_file <- .get_standalone_index()
   server <- epivizrServer::createServer(static_site_path = webpath, non_interactive=non_interactive, ...)
   app <- epivizr::startEpiviz(server=server, 
@@ -82,6 +99,7 @@ startStandalone <- function(gene_track=NULL, seqinfo=NULL, keep_seqlevels=NULL,
                               start=NULL,
                               end=NULL, 
                               register_function=register_function,
+                              browser_fun=browser_fun,
                               ...)
 
   send_request <- app$server$is_interactive()

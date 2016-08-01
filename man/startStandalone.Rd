@@ -6,7 +6,8 @@
 \usage{
 startStandalone(gene_track = NULL, seqinfo = NULL, keep_seqlevels = NULL,
   chr = NULL, start = NULL, end = NULL, non_interactive = FALSE,
-  register_function = epivizr:::.register_all_the_epiviz_things, ...)
+  register_function = epivizr:::.register_all_the_epiviz_things,
+  use_viewer_option = FALSE, ...)
 }
 \arguments{
 \item{gene_track}{(OrganismDb) an object of type \code{\link[OrganismDbi]{OrganismDb}} or \code{\link[GenomicFeatures]{TxDb}}}
@@ -24,6 +25,9 @@ startStandalone(gene_track = NULL, seqinfo = NULL, keep_seqlevels = NULL,
 \item{non_interactive}{(logical) run server in non-interactive mode. Used for testing and development.}
 
 \item{register_function}{(function) function used to initialize actions in epiviz app. Used for testing and development.}
+
+\item{use_viewer_option}{(logical) run application in viewer defined by \code{getOption("viewer")}.
+This allows standalone app to run in Rstudio's viewer (FALSE by default)}
 
 \item{...}{additional arguments passed to \code{\link[epivizr]{startEpiviz}}.}
 }
