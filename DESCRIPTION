@@ -9,7 +9,7 @@ Description: This package imports the epiviz visualization JavaScript
         completely within R. This standalone version allows to browse 
         arbitrary genomes through genome annotations provided by 
         Bioconductor packages. 
-Depends: R (>= 3.2.3), epivizr (>= 1.99.5), methods
+Depends: R (>= 3.2.3), epivizr (>= 2.3.6), methods
 License: MIT + file LICENSE
 LazyData: true
 Imports: git2r, epivizrServer, GenomeInfoDb, BiocGenerics, 

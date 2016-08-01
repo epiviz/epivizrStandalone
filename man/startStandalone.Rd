@@ -7,7 +7,7 @@
 startStandalone(gene_track = NULL, seqinfo = NULL, keep_seqlevels = NULL,
   chr = NULL, start = NULL, end = NULL, non_interactive = FALSE,
   register_function = epivizr:::.register_all_the_epiviz_things,
-  use_viewer_option = FALSE, ...)
+  use_viewer_option = FALSE, ws_host = "localhost", ...)
 }
 \arguments{
 \item{gene_track}{(OrganismDb) an object of type \code{\link[OrganismDbi]{OrganismDb}} or \code{\link[GenomicFeatures]{TxDb}}}
@@ -28,6 +28,8 @@ startStandalone(gene_track = NULL, seqinfo = NULL, keep_seqlevels = NULL,
 
 \item{use_viewer_option}{(logical) run application in viewer defined by \code{getOption("viewer")}.
 This allows standalone app to run in Rstudio's viewer (FALSE by default)}
+
+\item{ws_host}{(character) host address to use to open websocket connection}
 
 \item{...}{additional arguments passed to \code{\link[epivizr]{startEpiviz}}.}
 }
