@@ -38,7 +38,7 @@
 #' @param register_function (function) function used to initialize actions in epiviz app. Used for testing and development.
 #' @param use_viewer_option (logical) run application in viewer defined by \code{getOption("viewer")}.
 #'  This allows standalone app to run in Rstudio's viewer (FALSE by default)
-#' @param ws_host (character) host address to use to open websocket connection
+#' @param host (character) host address for application (127.0.0.1 by default)
 #' @param ... additional arguments passed to \code{\link[epivizr]{startEpiviz}}.
 #'  
 #' @return An object of class \code{\link[epivizr]{EpivizApp}}
@@ -62,7 +62,7 @@ startStandalone <- function(gene_track=NULL, seqinfo=NULL, keep_seqlevels=NULL,
                             chr=NULL, start=NULL, end=NULL,
                             non_interactive=FALSE, 
                             register_function=epivizr:::.register_all_the_epiviz_things,
-                            use_viewer_option=FALSE, ws_host = "localhost", 
+                            use_viewer_option=FALSE, host = "127.0.0.1", 
                             ...) {
   if (is.null(gene_track) && is.null(seqinfo)) {
     stop("Error starting standalone, one of 'gene_track' and 'seqinfo' must be non-null")
@@ -91,7 +91,7 @@ startStandalone <- function(gene_track=NULL, seqinfo=NULL, keep_seqlevels=NULL,
   index_file <- .get_standalone_index()
   server <- epivizrServer::createServer(static_site_path = webpath, non_interactive=non_interactive, ...)
   app <- epivizr::startEpiviz(server=server, 
-                              host="http://localhost", 
+                              host=paste0("http://", host), 
                               path=paste0("/", index_file), 
                               http_port=server$.port,
                               open_browser=FALSE,
@@ -101,7 +101,6 @@ startStandalone <- function(gene_track=NULL, seqinfo=NULL, keep_seqlevels=NULL,
                               end=NULL, 
                               register_function=register_function,
                               browser_fun=browser_fun,
-                              ws_host=ws_host,
                               ...)
 
   send_request <- app$server$is_interactive()
