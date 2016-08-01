@@ -1,4 +1,4 @@
-.wait_until_connected <- function(server, timeout=3L) {
+.wait_until_connected <- function(server, timeout=60L) {
   ptm <- proc.time()
   while (!server$is_socket_connected() && (proc.time() - ptm < timeout)["elapsed"]) {
     Sys.sleep(0.001)
