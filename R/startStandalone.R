@@ -36,6 +36,8 @@
 #' @param end (integer) end location to browse to on app startup.
 #' @param non_interactive (logical) run server in non-interactive mode. Used for testing and development.
 #' @param register_function (function) function used to initialize actions in epiviz app. Used for testing and development.
+#' @param launch_epiviz_app (logical) to launch epiviz desktop app.
+#' @param launch_epiviz_location (character) if epiviz desktop app is not installed system wide, specify the location of the epiviz app.
 #' @param use_viewer_option (logical) run application in viewer defined by \code{getOption("viewer")}.
 #'  This allows standalone app to run in Rstudio's viewer (FALSE by default)
 #' @param host (character) host address for application (127.0.0.1 by default)
@@ -62,6 +64,8 @@ startStandalone <- function(gene_track=NULL, seqinfo=NULL, keep_seqlevels=NULL,
                             chr=NULL, start=NULL, end=NULL,
                             non_interactive=FALSE, 
                             register_function=epivizr:::.register_all_the_epiviz_things,
+                            launch_epiviz_app=FALSE,
+                            launch_epiviz_location=NULL,
                             use_viewer_option=FALSE, host = "127.0.0.1", 
                             ...) {
   if (is.null(gene_track) && is.null(seqinfo)) {
@@ -76,23 +80,36 @@ startStandalone <- function(gene_track=NULL, seqinfo=NULL, keep_seqlevels=NULL,
     stop("Error starting standalone, seqinfo must be of type 'Seqinfo'")
   }
   
-  if (!non_interactive) {
-    tryCatch(.check_epiviz_update(),
-             error=function(e) {})
-
-  }
-  webpath <- system.file("www", package = "epivizrStandalone")
   browser_fun <- if (use_viewer_option) {
     .viewer_option_browse_fun
   } else {
     utils::browseURL
   }
+  
+  if(launch_epiviz_app) {
+    browser_fun <- function(url) {print(url)}
+    webpath <- ""
     
-  index_file <- .get_standalone_index()
+    host <- NULL
+    path <- NULL
+  }
+  else {
+    if (!non_interactive) {
+      tryCatch(.check_epiviz_update(),
+               error=function(e) {})
+      
+    }
+    webpath <- system.file("www", package = "epivizrStandalone")
+    index_file <- .get_standalone_index() 
+    
+    host <- paste0("http://", host)
+    path <- paste0("/", index_file)
+  }
+  
   server <- epivizrServer::createServer(static_site_path = webpath, non_interactive=non_interactive, ...)
   app <- epivizr::startEpiviz(server=server, 
-                              host=paste0("http://", host), 
-                              path=paste0("/", index_file), 
+                              host=host, 
+                              path=path, 
                               http_port=server$.port,
                               open_browser=FALSE,
                               use_cookie=FALSE, 
@@ -113,9 +130,19 @@ startStandalone <- function(gene_track=NULL, seqinfo=NULL, keep_seqlevels=NULL,
   # now load the app
   if (send_request) {
     app$.open_browser()
+    if(launch_epiviz_app) {
+      
+      app_location <- "epiviz"
+      if(!is.null(launch_epiviz_location)) {
+        app_location <- paste0(launch_epiviz_location, "/", app_location)
+      }
+
+      system(paste0(app_location, ' --port=', server$.port), wait=FALSE)
+    }
   }
 
   tryCatch({
+
     if (app$server$is_interactive()) {
       .wait_until_connected(app$server)      
     }
