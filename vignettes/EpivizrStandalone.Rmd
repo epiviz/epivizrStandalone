@@ -24,7 +24,7 @@ For example, to browse the mouse genome we would do the following.
 library(epivizrStandalone)
 library(Mus.musculus)
 
-app <- startStandalone(Mus.musculus, keep_seqlevels=paste0("chr",c(1:19,"X","Y")))	
+app <- startStandalone(Mus.musculus, keep_seqlevels=paste0("chr",c(1:19,"X","Y")), verbose=TRUE, use_viewer_option = TRUE)	
 ```
 
 ```{r,eval=TRUE,echo=FALSE,message=FALSE}
@@ -36,6 +36,17 @@ app <- startStandalone(seqinfo=seqinfo(Mus.musculus), keep_seqlevels=paste0("chr
 
 app$server$start_server()	
 ```
+
+Epiviz Desktop App can also be launched to connect to the epivizr session. To do so, 
+
+```{r,eval=FALSE,echo=TRUE}
+library(epivizrStandalone)
+library(Mus.musculus)
+
+app <- startStandaloneApp(Mus.musculus, keep_seqlevels=paste0("chr",c(1:19,"X","Y")), verbose=TRUE)	
+```
+
+
 
 Now the web app UI serves as a mouse genome browser.
 
