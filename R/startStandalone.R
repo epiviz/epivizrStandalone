@@ -79,7 +79,7 @@ startStandalone <- function(gene_track=NULL, seqinfo=NULL, keep_seqlevels=NULL,
   if (!non_interactive) {
     tryCatch(.check_epiviz_update(),
              error=function(e) {})
-    
+
   }
   webpath <- system.file("www", package = "epivizrStandalone")
   browser_fun <- if (use_viewer_option) {
