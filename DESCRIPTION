@@ -16,7 +16,7 @@ Imports: git2r, epivizrServer, GenomeInfoDb, BiocGenerics,
         GenomicFeatures, S4Vectors
 Suggests: testthat, knitr, rmarkdown, OrganismDbi (>= 1.13.9), Mus.musculus,
         Biobase, BiocStyle
-RoxygenNote: 5.0.1
+RoxygenNote: 6.0.1
 VignetteBuilder: knitr
 biocViews: Visualization, Infrastructure, GUI
 NeedsCompilation: no

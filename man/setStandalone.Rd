@@ -31,4 +31,3 @@ or local repository containing the epiviz JS app (used for testing and developme
 setStandalone(url="https://github.com/epiviz/epiviz.git", branch="master", non_interactive=TRUE)
 
 }
-
