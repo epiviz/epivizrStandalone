@@ -140,7 +140,7 @@ startStandalone <- function(gene_track=NULL, seqinfo=NULL, keep_seqlevels=NULL,
       system(paste0(app_location, ' --port=', server$.port), wait=FALSE)
     }
   }
-  
+
   tryCatch({
 
     if (app$server$is_interactive()) {
