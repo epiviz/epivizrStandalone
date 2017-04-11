@@ -2,7 +2,6 @@
 
 export(setStandalone)
 export(startStandalone)
-export(startStandaloneApp)
 import(BiocGenerics)
 import(GenomeInfoDb)
 import(GenomicFeatures)
