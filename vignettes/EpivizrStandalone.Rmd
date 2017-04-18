@@ -37,6 +37,20 @@ app <- startStandalone(seqinfo=seqinfo(Mus.musculus), keep_seqlevels=paste0("chr
 app$server$start_server()	
 ```
 
+## Launch Epiviz Desktop App
+
+There is also an epiviz desktop application based on the electron platform: http://epiviz.org. This package allows `epivizr` sessions to connect to the desktop app trough the
+`startStandaloneApp` function. For example, we can start a 
+genome browser using the epiviz desktop app:
+
+```{r,eval=FALSE,echo=TRUE}
+library(epivizrStandalone)
+library(Mus.musculus)
+
+app <- startStandaloneApp(Mus.musculus, keep_seqlevels=paste0("chr",c(1:19,"X","Y")), verbose=TRUE)	
+```
+
+
 ```{r}
 app$stop_app()
 ```
