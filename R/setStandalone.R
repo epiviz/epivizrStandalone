@@ -5,7 +5,6 @@
 #' which git repository is used. It can be either a github repository (the usual case), 
 #' or local repository containing the epiviz JS app (used for testing and development).
 #' 
-#' @import git2r
 #' 
 #' @param url (character) github url to use. defaults to (\url{"https://github.com/epiviz/epiviz.git"}).
 #' @param branch (character) branch on the github repository. defaults to (master).

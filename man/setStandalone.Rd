@@ -4,8 +4,12 @@
 \alias{setStandalone}
 \title{Set settings for epiviz standalone repository.}
 \usage{
-setStandalone(url = "https://github.com/epiviz/epiviz.git", branch = "min",
-  local_path = NULL, non_interactive = FALSE)
+setStandalone(
+  url = "https://github.com/epiviz/epiviz.git",
+  branch = "min",
+  local_path = NULL,
+  non_interactive = FALSE
+)
 }
 \arguments{
 \item{url}{(character) github url to use. defaults to (\url{"https://github.com/epiviz/epiviz.git"}).}

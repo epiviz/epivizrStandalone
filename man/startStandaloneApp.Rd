@@ -4,11 +4,18 @@
 \alias{startStandaloneApp}
 \title{Start a standalone \code{epivizr} session.}
 \usage{
-startStandaloneApp(gene_track = NULL, seqinfo = NULL,
-  keep_seqlevels = NULL, chr = NULL, start = NULL, end = NULL,
+startStandaloneApp(
+  gene_track = NULL,
+  seqinfo = NULL,
+  keep_seqlevels = NULL,
+  chr = NULL,
+  start = NULL,
+  end = NULL,
   non_interactive = FALSE,
   register_function = epivizr:::.register_all_the_epiviz_things,
-  host = "127.0.0.1", ...)
+  host = "127.0.0.1",
+  ...
+)
 }
 \arguments{
 \item{gene_track}{(OrganismDb) an object of type \code{\link[OrganismDbi]{OrganismDb}} or \code{\link[GenomicFeatures]{TxDb}}}
